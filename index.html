@@ -1,0 +1,568 @@
+<html lang="id" class="translated-ltr"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jelajah Bareng</title>
+
+<style>
+:root {
+  --green: #1e6b50;
+  --lime: #d9f27b;
+  --paper: #f5f6ef;
+  --ink: #17251f;
+  --muted: #64736b;
+  --line: #e1e7df;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+
+.hero {
+  background: var(--green);
+  color: white;
+  padding: 32px max(20px, calc((100% - 1100px)/2)) 45px;
+}
+
+.brand { font-size: 20px; font-weight: bold; }
+.brand span { color: var(--lime); }
+
+.hero h1 {
+  font-size: clamp(36px, 6vw, 58px);
+  margin: 45px 0 14px;
+  line-height: 1.05;
+}
+
+.hero p { line-height: 1.7; max-width: 600px; }
+
+.wrap {
+  max-width: 1100px;
+  margin: auto;
+  padding: 28px 20px 60px;
+}
+
+.btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-weight: bold;
+  margin: 5px 3px 5px 0;
+}
+
+.primary { background: var(--lime); color: var(--ink); }
+.dark { background: var(--green); color: white; }
+.soft { background: #edf3e9; color: var(--green); }
+.danger { background: #fff0ee; color: #a33d31; }
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filters input, .filters select {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 11px;
+  background: white;
+  max-width: 100%;
+}
+
+.count { font-size: 13px; color: var(--muted); margin-top: 7px; }
+
+.notice {
+  background: #eaf2e6;
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 22px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card.visited { border: 2px solid #70a786; }
+
+.photo {
+  height: 200px;
+  background: #e1e9dd;
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardbody {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card h2 { font-size: 20px; margin: 0 0 8px; }
+.location { color: var(--green); font-size: 13px; font-weight: bold; }
+.desc { font-size: 14px; line-height: 1.6; color: var(--muted); }
+.meta { font-size: 12px; margin: 8px 0 12px; }
+
+.visitcheck {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  padding: 12px;
+  background: #f1f7ed;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 8px 0 12px;
+  cursor: pointer;
+}
+
+.visitcheck input {
+  width: 19px;
+  height: 19px;
+  accent-color: var(--green);
+}
+
+.visited h2 {
+  text-decoration: line-through;
+  color: #64736b;
+}
+
+.cardactions { display: flex; gap: 8px; }
+.cardactions button {
+  flex: 1;
+  padding: 10px;
+  border: 0;
+  border-radius: 9px;
+  font-weight: bold;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  padding: 40px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 25px;
+  font-size: 12px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #0009;
+  z-index: 10;
+  overflow-y: auto;
+  padding: 18px;
+}
+
+.modal.open { display: flex; align-items: center; justify-content: center; }
+
+.dialog {
+  width: min(600px, 100%);
+  background: white;
+  padding: 23px;
+  border-radius: 16px;
+  margin: auto;
+}
+
+.dialog h2 { margin-top: 0; }
+
+.formgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: 13px; font-weight: bold; }
+
+.field input, .field select, .field textarea {
+  padding: 11px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  width: 100%;
+}
+
+.field textarea { min-height: 90px; }
+
+.dialogactions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+@media(max-width: 850px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media(max-width: 560px) {
+  .grid { grid-template-columns: 1fr; }
+  .formgrid { grid-template-columns: 1fr; }
+  .field.full { grid-column: auto; }
+  .filters { width: 100%; }
+  .filters input { width: 100%; }
+}
+</style>
+<link type="text/css" rel="stylesheet" charset="UTF-8" href="https://www.gstatic.com/_/translate_http/_/ss/k=translate_http.tr.zZZZhVqDDCw.L.W.O/am=AADA/d=0/rs=AN8SPfqr7eOYsG8ngHYsF_DtyJ1UBn3taQ/m=el_main_css"></head>
+
+<body>
+
+<header class="hero">
+  <div class="brand"><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">WISHLIST JUAN-ANGIE </font></font><span><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">.</font></font></span></div>
+  <h1>Tempat seru,<br>cerita baru.</h1>
+  <p>Kita jelajahi dunia yang indah ini berdua dengan semua wishlist ini</p>
+  <button class="btn primary" onclick="openForm()"><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">+ Tambahkan tempat</font></font></button>
+  <button class="btn primary" onclick="document.getElementById('places').scrollIntoView({behavior:'smooth'})">Lihat daftar ↓</button>
+</header>
+
+<main class="wrap" id="places">
+  <div class="notice">
+    <b>Catatan:</b> Data versi ini tersimpan di browser perangkat
+    yang digunakan. Agar semua orang dapat melihat dan mengedit
+    daftar yang sama, diperlukan database online.
+  </div>
+
+  <div class="toolbar">
+    <div>
+      <b>Daftar destinasi</b>
+      <div class="count" id="count">1 ditampilkan · 1 total · 0 sudah dikunjungi</div>
+    </div>
+
+    <div class="filters">
+      <input id="search" placeholder="Carilah tempat..." oninput="render()">
+
+      <select id="category" onchange="render()">
+        <option value="Semua">Semua kategori</option>
+        <option>Pantai</option>
+        <option><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">Tahu</font></font></option>
+        <option>Kota</option>
+        <option>Kuliner</option>
+        <option>Budaya</option>
+        <option>Lainnya</option>
+      </select>
+
+      <select id="visitFilter" onchange="render()">
+        <option value="Semua">Semua status</option>
+        <option value="Belum">Belum dikunjungi</option>
+        <option value="Sudah">Sudah dikunjungi</option>
+      </select>
+
+      <button class="btn dark" onclick="openForm()"><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">+ Tambahkan</font></font></button>
+    </div>
+  </div>
+
+  <section class="grid" id="grid">
+    <article class="card ">
+      <div class="photo">
+        <img src="https://maxio.perhutani.id/perhutani.co.id/wp-content/uploads/2025/07/Ft-Kembangkan-WW-Telomoyo-Tragle-Sky.jpg" alt="TELOMOYO RESTO" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/800x500/e1e9dd/315844?text=Foto+Tempat'">
+      </div>
+
+      <div class="cardbody">
+        <h2>TELOMOYO RESTO</h2>
+        <div class="location">📍 MAGELANG,SEMARANG</div>
+        <p class="desc"><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">menciptakan matahari terbit yang indah</font></font></p>
+        <div class="meta">
+          Kategori: Alam<br>
+          Biaya: Rp250.000
+        </div>
+
+        <label class="visitcheck">
+          <input type="checkbox" onchange="toggleVisited(7, this.checked)">
+          Tandai sudah dikunjungi
+        </label>
+
+        <div class="cardactions">
+          <button class="soft" onclick="editPlace(7)"><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">✎ Edit</font></font></button>
+          <button class="danger" onclick="deletePlace(7)"><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">senang</font></font></button>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>
+
+<div class="footer">Jelajah Bareng · Temukan tempat, buat kenangan.</div>
+
+<div class="modal" id="modal">
+  <div class="dialog">
+    <h2 id="formTitle"><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">Tambahkan tempat</font></font></h2>
+
+    <form id="placeForm" onsubmit="savePlace(event)">
+      <input type="hidden" id="editId" value="">
+
+      <div class="formgrid">
+        <div class="field">
+          <label>Nama tempat *</label>
+          <input id="name" required="" placeholder="Nama destinasi">
+        </div>
+
+        <div class="field">
+          <label>Kota / lokasi *</label>
+          <input id="city" required="" placeholder="Kota, provinsi">
+        </div>
+
+        <div class="field">
+          <label>Kategori</label>
+          <select id="categoryInput">
+            <option><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">Pantai</font></font></option>
+            <option><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">Tahu</font></font></option>
+            <option><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">Kota</font></font></option>
+            <option><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">Kuliner</font></font></option>
+            <option><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">Budaya</font></font></option>
+            <option><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">Lainnya</font></font></option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Perkiraan biaya</label>
+          <input id="budget" placeholder="Contoh: Rp50.000/orang">
+        </div>
+
+        <div class="field full">
+          <label><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">Tautan foto (URL)</font></font></label>
+          <input id="photo" type="url" placeholder="https://alamat-foto.jpg">
+        </div>
+
+        <div class="field full">
+          <label>Deskripsi / catatan</label>
+          <textarea id="description" placeholder="Apa yang menarik dari tempat ini?"></textarea>
+        </div>
+      </div>
+
+      <div class="dialogactions">
+        <button type="button" class="btn soft" onclick="closeForm()">Batal</button>
+        <button type="submit" class="btn dark"><font dir="auto" style="vertical-align: inherit;"><font dir="auto" style="vertical-align: inherit;">Menyimpan</font></font></button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const starter = [
+  {
+    id: 1,
+    name: "Candi Borobudur",
+    city: "Magelang, Jawa Tengah",
+    category: "Budaya",
+    budget: "Cek tiket resmi",
+    description: "Menikmati arsitektur candi dan sejarah Indonesia.",
+    photo: "https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&w=900&q=80",
+    visited: false
+  },
+  
+];
+
+let places = loadPlaces();
+let nextId = Math.max(0, ...places.map(p => Number(p.id) || 0)) + 1;
+
+function loadPlaces() {
+  try {
+    const saved = localStorage.getItem("jelajah-bersama-places-v1");
+    return saved ? JSON.parse(saved) : starter;
+  } catch {
+    return starter;
+  }
+}
+
+function persist() {
+  try {
+    localStorage.setItem("jelajah-bersama-places-v1", JSON.stringify(places));
+  } catch {
+    alert("Data tidak dapat disimpan di browser ini.");
+  }
+}
+
+function esc(value = "") {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[c]);
+}
+
+function render() {
+  const q = document.getElementById("search").value.toLowerCase().trim();
+  const cat = document.getElementById("category").value;
+  const status = document.getElementById("visitFilter").value;
+
+  const list = places.filter(p =>
+    (cat === "Semua" || p.category === cat) &&
+    (status === "Semua" ||
+      (status === "Sudah" ? p.visited : !p.visited)) &&
+    [p.name, p.city, p.description, p.category]
+      .join(" ").toLowerCase().includes(q)
+  );
+
+  const visitedCount = places.filter(p => p.visited).length;
+
+  document.getElementById("count").textContent =
+    `${list.length} ditampilkan · ${places.length} total · ${visitedCount} sudah dikunjungi`;
+
+  const grid = document.getElementById("grid");
+
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty">Tempat tidak ditemukan. Coba kata kunci lain atau tambahkan tempat baru.</div>';
+    return;
+  }
+
+  grid.innerHTML = list.map(p => `
+    <article class="card ${p.visited ? "visited" : ""}">
+      <div class="photo">
+        <img src="${esc(p.photo || "")}"
+             alt="${esc(p.name)}"
+             loading="lazy"
+             onerror="this.onerror=null;this.src='https://placehold.co/800x500/e1e9dd/315844?text=Foto+Tempat'">
+      </div>
+
+      <div class="cardbody">
+        <h2>${esc(p.name)}</h2>
+        <div class="location">📍 ${esc(p.city)}</div>
+        <p class="desc">${esc(p.description || "Belum ada deskripsi.")}</p>
+        <div class="meta">
+          Kategori: ${esc(p.category)}<br>
+          Biaya: ${esc(p.budget || "Belum ditentukan")}
+        </div>
+
+        <label class="visitcheck">
+          <input type="checkbox"
+            ${p.visited ? "checked" : ""}
+            onchange="toggleVisited(${Number(p.id)}, this.checked)">
+          ${p.visited ? "✓ Sudah dikunjungi" : "Tandai sudah dikunjungi"}
+        </label>
+
+        <div class="cardactions">
+          <button class="soft" onclick="editPlace(${Number(p.id)})">✎ Edit</button>
+          <button class="danger" onclick="deletePlace(${Number(p.id)})">Hapus</button>
+        </div>
+      </div>
+    </article>
+  `).join("");
+}
+
+function toggleVisited(id, checked) {
+  const p = places.find(p => p.id === id);
+  if (!p) return;
+
+  p.visited = checked;
+  persist();
+  render();
+}
+
+function openForm() {
+  document.getElementById("placeForm").reset();
+  document.getElementById("editId").value = "";
+  document.getElementById("formTitle").textContent = "Tambah tempat";
+  document.getElementById("modal").classList.add("open");
+}
+
+function closeForm() {
+  document.getElementById("modal").classList.remove("open");
+}
+
+function savePlace(event) {
+  event.preventDefault();
+
+  const id = Number(document.getElementById("editId").value);
+  const old = places.find(p => p.id === id);
+
+  const item = {
+    id: id || nextId++,
+    name: document.getElementById("name").value.trim(),
+    city: document.getElementById("city").value.trim(),
+    category: document.getElementById("categoryInput").value,
+    budget: document.getElementById("budget").value.trim(),
+    photo: document.getElementById("photo").value.trim(),
+    description: document.getElementById("description").value.trim(),
+    visited: old ? !!old.visited : false
+  };
+
+  if (id) {
+    places = places.map(p => p.id === id ? item : p);
+  } else {
+    places.unshift(item);
+  }
+
+  persist();
+  render();
+  closeForm();
+}
+
+function editPlace(id) {
+  const p = places.find(p => p.id === id);
+  if (!p) return;
+
+  document.getElementById("editId").value = p.id;
+  document.getElementById("name").value = p.name;
+  document.getElementById("city").value = p.city;
+  document.getElementById("categoryInput").value = p.category || "Lainnya";
+  document.getElementById("budget").value = p.budget || "";
+  document.getElementById("photo").value = p.photo || "";
+  document.getElementById("description").value = p.description || "";
+  document.getElementById("formTitle").textContent = "Edit tempat";
+  document.getElementById("modal").classList.add("open");
+}
+
+function deletePlace(id) {
+  const p = places.find(p => p.id === id);
+  if (!p) return;
+
+  if (!confirm(`Hapus "${p.name}" dari daftar?`)) return;
+
+  places = places.filter(p => p.id !== id);
+  persist();
+  render();
+}
+
+document.getElementById("modal").addEventListener("click", event => {
+  if (event.target.id === "modal") closeForm();
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeForm();
+});
+
+render();
+</script><div id="goog-gt-tt" class="VIpgJd-yAWNEb-L7lbkb skiptranslate" style="display: none; border-radius: 12px; margin: 0 0 0 -23px; padding: 0; font-family: 'Google Sans', Arial, sans-serif;" data-id=""><div id="goog-gt-vt" class="VIpgJd-yAWNEb-hvhgNd"><div class="VIpgJd-yAWNEb-hvhgNd-Ud7fr"><img src="https://fonts.gstatic.com/s/i/productlogos/translate/v14/24px.svg" width="24" height="24" alt=""><div class=" VIpgJd-yAWNEb-hvhgNd-IuizWc-i3jM8c " dir="ltr">Teks asli</div></div><div class="VIpgJd-yAWNEb-hvhgNd-k77Iif"><div id="goog-gt-original-text" class="VIpgJd-yAWNEb-nVMfcd-fmcmS VIpgJd-yAWNEb-hvhgNd-axAV1"></div></div><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid ltr"><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid-B7I4Od ltr" dir="ltr"><div class="VIpgJd-yAWNEb-hvhgNd-UTujCb">Beri rating terjemahan ini</div><div class="VIpgJd-yAWNEb-hvhgNd-eO9mKe">Masukan Anda akan digunakan untuk membantu meningkatkan kualitas Google Terjemahan</div></div><div class="VIpgJd-yAWNEb-hvhgNd-xgov5 ltr"><button id="goog-gt-thumbUpButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Terjemahan bagus" aria-label="Terjemahan bagus" aria-pressed="false"><span id="goog-gt-thumbUpIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7H2v13h16c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM7 18H4V9h3v9zm14-7l-3 7H9V8l4.34-4.34L12 9h9v2z"></path></svg></span><span id="goog-gt-thumbUpIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7v13h11c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM5 7H1v13h4V7z"></path></svg></span></button><button id="goog-gt-thumbDownButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Terjemahan buruk" aria-label="Terjemahan buruk" aria-pressed="false"><span id="goog-gt-thumbDownIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7h5V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zM17 6h3v9h-3V6zM3 13l3-7h9v10l-4.34 4.34L12 15H3v-2z"></path></svg></span><span id="goog-gt-thumbDownIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zm16 0h4V4h-4v13z"></path></svg></span></button></div></div><div id="goog-gt-votingHiddenPane" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><form id="goog-gt-votingForm" action="//translate.googleapis.com/translate_voting?client=te_lib" method="post" target="votingFrame" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><input type="text" name="sl" id="goog-gt-votingInputSrcLang"><input type="text" name="tl" id="goog-gt-votingInputTrgLang"><input type="text" name="query" id="goog-gt-votingInputSrcText"><input type="text" name="gtrans" id="goog-gt-votingInputTrgText"><input type="text" name="vote" id="goog-gt-votingInputVote"></form><iframe name="votingFrame" frameborder="0"></iframe></div></div></div>
+
+
+
+</body></html>
